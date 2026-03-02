@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS - Basi 03 - Form HTML</title>
+
+    <link rel="stylesheet" href="../css/general.css">
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <!--
+            I form vengono utilizzati per ottenere informazioni dall'utente, che sia per permettergli di fare il login o la regstrazione al sito o per contattare i proprietari del sito mandandogli un messaggio o ancora un form di ricerca dove possiamo chiedere all'utente i parametri della sua ricerca.
+
+            Per questo di solito un form è composto da una serie di campi di input nei quali l'utente può immettere informazioni. In base al tipo di informazione richiesta, servirà un campo di input specifico e lo stabiliremo tramite l'attributo type.
+        -->
+
+        <h1>Form HTML</h1>
+
+        <!-- L'attributo action nel tag FORM serve a dire al browser cosa fare una volta che l'utente invia le informazioni -->
+        <form>
+            <!--
+                I tag INPUT sono tag autoconclusivi e hanno sempre l'attributo type per indicare il genere di dato che ci aspettiamo dall'utente.
+
+                Sarebbe buona norma utilizzare i tag LABEL per etichettare i campi di input, così che il browser e soprattutto l'utente sappiano che tipo di dato ci aspettiamo che venga inserito all'interno di ogni input. Nell'attributo for della LABEL si inserisce l'id dell'input che descrive.
+
+                L'attributo name ha uno scopo simile all'id, ma viene utilizzato nel momento in cui il form viene inviato ad esempio a un file php, che prende questi dati e li processa in base a ciò che serve servendosi dell'attributo name.
+
+                Esistono campi di input che non richiedono all'utente di scrivere qualcosa, ma di selezionare più opzioni, come per esempio le checkbox, i radio button e le select.
+
+                La select è un campo di input che permette all'utente di cliccare su di essa per avere un menù a tendina dal quale scegliere il valore da inserire e poi inviare col form.
+                Siccome dobbiamo inserire noi le opzioni della select, il tag SELECT non è autoconclusivo, infatti al suo interno accetta dei tag OPTION che riporteranno le opzioni di valori tra cui scegliere.
+
+                Utilizziamo il tag TEXTAREA per dare all'utente la possibilità di inserire una grande quantità di testo.
+            -->
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Inserisci il TUO username">
+
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Inserisci il tuo indirizzo email" required>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+
+            <label for="provincia">Seleziona la tua provincia</label>
+            <select name="provincia" id="provincia">
+                <option value="">Scegli la tua provincia</option>
+                <option value="TO">Torino</option>
+                <option value="MI">Milano</option>
+                <option value="RO">Roma</option>
+            </select>
+
+            <p>Seleziona il tuo gender:</p>
+            <div class="chk">
+                <input type="radio" name="gender" id="gender-uomo" value="uomo">
+                <label for="gender-uomo">Uomo</label>
+
+                <input type="radio" name="gender" id="gender-donna" value="donna">
+                <label for="gender-donna">Donna</label>
+
+                <input type="radio" name="gender" id="gender-altro" value="altro">
+                <label for="gender-altro">Altro</label>
+            </div>
+
+            <label for="bio">Dicci qualcosa sulla tua vita:</label>
+            <textarea name="bio" id="bio" cols="60" rows="10" placeholder="Parlaci di te..."></textarea>
+
+            <!-- <input type="submit" value="Registrati"> -->
+            <button type="reset">Resetta il form</button>
+            <button type="submit">Registrati</button>
+        </form>
+        
+    </div>
+    
+</body>
+</html>
