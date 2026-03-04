@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS - Stile pagine 01 - Basi CSS</title>
+
+    <!-- Aggiungo del CSS utilizzando il tag STYLE direttamente nell'HTML -->
+    <!-- <style>
+        h1 {
+            color: orange;
+        }
+
+        p {
+            color: slategray;
+        }
+    </style> -->
+
+    <!-- Collego a questa pagina HTML un foglio di stile esterno da cui prendere tutte le regole CSS -->
+    <link rel="stylesheet" href="css/01-basi-css.css">
+</head>
+<body>
+
+    <!--
+        Se l'HTML serve a creare la struttura di una pagina web, il CSS si occupa di renderla presentabile.
+        Per farlo dobbiamo scrivere una lista di regole CSS che assegnano uno stile ai vari elementi HTML.
+
+        Un set di regole CSS ha questo aspetto:
+
+        div {
+            color: red;
+            margin: 20px,
+        }
+
+        li {
+            font-weight: bold;
+        }
+
+        Ogni set è composto da:
+            - Selettore -> permette di definire quali elementi devono essere stilizzati (es.: div e li).
+            - Parentesi graffe -> contengono tutte le regole di stile che gli elementi selezionati devono avere.
+            - Dichiarazione -> è una coppia chiave/valore che definisce come debba essere stilizzato l'elemento selezionato. Composta da:
+                - Proprietà: rappresenta l'aspetto che si vuole modificare
+                - Valore: indica come deve essere modificata la proprietà. I valori possono essere colori, dimensioni, unità di misura, ecc.
+            Una dichiarazione termina SEMPRE con un punto e virgola.
+
+        Ci sono 3 modi per aggiungere dello stile al nostro documento HTML:
+            - Con un tag STYLE direttamente nell'HTML (sconsigliato)
+            - Direttamente sull'elemento interessato con la proprietà style (sconsigliato)
+            - Con un foglio di stile separato
+    -->
+
+    <h1>Basi CSS</h1>
+
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus quas minima delectus natus officia magni, explicabo accusantium. Vel cum non explicabo aliquid aut mollitia rerum excepturi nulla, atque nesciunt aspernatur!
+    </p>
+
+    <div>
+        <h2>Heading 2</h2>
+
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique quas inventore tenetur in, eum ex voluptate veritatis eveniet vitae quos saepe dolorum illo eius mollitia amet qui eos magni deserunt?
+        </p>
+        
+        <ul>
+            <li>Voce 1</li>
+            <li>Voce 2</li>
+            <li>Voce 3</li>
+        </ul>
+    </div>
+    
+</body>
+</html>
