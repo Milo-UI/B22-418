@@ -1,3 +1,11 @@
+* {
+    /*
+        Cambio il box model per avere un maggiore controllo sugli elementi HTML
+        Default: content-box -> padding e border condizionano la dimensione dell'elemento
+    */
+    box-sizing: border-box;
+}
+
 body {
     /* permette di scegliere la font family del testo */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -66,3 +74,63 @@ li {
     Nero: #000000
     Bianco: #ffffff
 */
+
+/* -------------------- ELEMENTI BLOCK ED ELEMENTI INLINE ------------------- */
+/*
+    L'HTML è composto da elementi diversi, alcuni di essi sono elementi block e altri sono elementi inline. La differenza sta nel come vengono visualizzati sulla pagina e quanto spazio occupano.
+
+        - Elementi block: occupano l'intera larghezza disponibile, mandando "a capo" gli elementi che seguono, iniziano su una nuova riga e possono contenere altri elementi block e inline
+        Esempi: <p>, <div>, <h1>, <ul>, <li>...
+
+        - Elementi inline: occupano solo la larghezza necessaria per il loro contenuto e non iniziano su una nuova riga. Questi elementi vengono visualizzati uno accanto all'altro, a meno che non ci sia un'interruzione di riga. Possono contenere solo elementi inline.
+        Esempi: <span>, <a>, <img>, <strong>, <em>...
+*/
+
+/* span {
+    display: block;
+}
+
+div {
+    display: inline;
+} */
+
+/* ------------------------------ INLINE-BLOCK ------------------------------ */
+/*
+    Gli elementi inline-block combinano caratteristiche sia degli elementi inline che degli elementi block
+
+    Si comportano come elementi inline, quindi possono essere posizionati uno accanto all'altro, ma possono avere larghezza e altezza definite. In più supportano correttamente le proprietà di margin e padding.
+    NON iniziano su una nuova riga, a meno che non ci sia spazio sufficiente nella riga corrente.
+*/
+
+/* em {
+    display: inline-block;
+    width: 200px;
+    padding: 20px;
+    margin: 20px;
+} */
+
+/* ---------------------------- MARGIN E PADDING ---------------------------- */
+/*
+    Margin e padding controllano lo spazio attorno e dentro gli elementi.
+
+    MARGIN
+    Il margin è lo spazio esterno di un elemento. Si tratta dell'area che separa un elemento dagli altri circostanti. I margini non hanno colore e non influenzano le dimensioni dell'elemento, invece, creano spazio attorno a esso.
+
+    PADDING
+    Il padding è lo spazio interno di un elemento. Si tratta dell'area che separa il contenuto dell'elemento (come testo o immagini) dai bordi dell'elemento stesso. A differenza del margin, il padding influisce sulle dimensioni complessive dell'elemento.
+*/
+
+div {
+    background: #a7b5c2;
+    border: 1px solid black;
+    width: 452px;
+    display: inline-block;
+
+    margin: 20px 8px;
+    /* margin-top: 20px;
+    margin-right: 16px;
+    margin-bottom: 20px;
+    margin-left: 16px; */
+
+    padding: 20px;
+}
