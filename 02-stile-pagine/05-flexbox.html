@@ -284,6 +284,111 @@
                     </article>
                 </div>
 
+                <h2>5b) Altri esempi</h2>
+
+                <p>
+                    La proprietà <code>flex</code> è uno shorthand per <code>flex-grow</code>, <code>flex-shrink</code> e <code>flex-basis</code>. Qui vediamo separatamente cosa fa ognuna con tre mini demo visive.
+                </p>
+
+                <div class="note" style="margin-bottom: 1.5rem;">
+                    <strong>Idea mentale:</strong> <br>
+                    Prima Flexbox guarda la <code>flex-basis</code> (dimensione di base), poi usa <code>flex-grow</code> se avanza spazio e <code>flex-shrink</code> se lo spazio non basta.
+                </div>
+
+                <!-- DEMO 1: flex-grow -->
+                <h3>1) flex-grow: come dividersi lo spazio in più</h3>
+
+                <p>
+                    Tutti gli elementi partono dalla stessa base, ma hanno valori di <code>flex-grow</code> diversi. Ridimensiona la finestra e guarda come cambia la proporzione.
+                </p>
+
+                <div class="flex-gsb-demo flex-gsb-grow">
+                    <div class="box-gsb grow-1">grow: 1</div>
+                    <div class="box-gsb grow-1">grow: 1</div>
+                    <div class="box-gsb grow-2">grow: 2</div>
+                </div>
+
+                <p class="caption" style="margin-bottom: 2rem;">
+                    Il terzo elemento ha <code>flex-grow: 2</code> e prende il doppio dello spazio extra rispetto agli altri  (che hanno grow 1).
+                </p>
+
+                <!-- DEMO 2: flex-srink -->
+                <h3>2) flex-shrink: ridurre la dimensione quando lo spazio non basta</h3>
+
+                <p>
+                    Qui sotto le basi sono uguali, ma uno degli elementi ha <code>flex-shrink: 0</code>, cioè non vuole restringersi.
+                </p>
+
+                <div class="flex-gsb-demo flex-gsb-shrink">
+                    <div class="box-gsb shrink-1">shrink: 1</div>
+                    <div class="box-gsb shrink-0">shrink: 0</div>
+                    <div class="box-gsb shrink-1">shrink: 1</div>
+                </div>
+
+                <p class="caption" style="margin-bottom: 2rem;">
+                    L'elemento con <code>flex-shrink: 0</code> prova a mantenere la sua larghezza, mentre gli altri si comprimono.
+                </p>
+
+                <!-- DEMO 3: flex-basis -->
+                <h3>3) flex-basis: da che dimensione bisogna partire</h3>
+
+                <p>
+                    Tutti hanno lo stesso <code>flex-grow</code> e <code>flex-shrink</code>, ma basi diverse. Il risultato: partono da larghezze diverse e poi crescono / si restringono in proporzione.
+                </p>
+
+                <div class="flex-gsb-demo flex-gsb-basis">
+                    <div class="box-gsb basis-small">basis: 100px</div>
+                    <div class="box-gsb basis-medium">basis: 200px</div>
+                    <div class="box-gsb basis-large">basis: 300px</div>
+                </div>
+
+                <p class="caption">
+                    Con <code>flex: 1 1 Xpx</code> la base influenza il "peso iniziale" dell'elemento: quello con una base più grande tenderà a occupare più spazio anche dopo la distribuzione.
+                </p>
+
+            </div>
+        </section>
+
+        <!-- align-self e order -->
+        <section class="section section-alt">
+            <div class="container">
+
+                <h2>6) Personalizzare il singolo elemento: align-self e order</h2>
+
+                <p>
+                    A volte vogliamo che un solo elemento si comporti in modo diverso dagli altri. <br>
+                    Possiamo usare:
+                </p>
+
+                <ul>
+                    <li>
+                        <code>align-self</code>: per cambiare l'allineamento lungo l'asse trasversale
+                    </li>
+                    <li>
+                        <code>order</code>: per cambiare l'ordine visivo degli elementi
+                    </li>
+                </ul>
+
+                <div class="flex-self-order-demo">
+                    <!--
+                        Container flex con:
+                        - align-items: center (default per tutti)
+                        - uno degli elementi usa align-self per "staccarsi"
+                        - un elemento usa order per apparire primo
+                    -->
+                    <div class="flex-self-order">
+                        <div class="pill pill-normal">
+                            Elemento 1
+                        </div>
+                        <div class="pill pill-special">
+                            Elemento con align-self
+                        </div>
+                        <div class="pill pill-reordered">
+                            Primo elemento solo visivamente
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </section>
 

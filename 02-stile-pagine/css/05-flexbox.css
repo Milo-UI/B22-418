@@ -289,3 +289,133 @@ code {
     */
     flex: 1;
 }
+
+.flex-gsb-demo {
+    display: flex;
+    gap: .75rem;
+    margin-top: .8rem;
+
+    background: #eff6ff;
+    padding: .9rem;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+}
+
+.box-gsb {
+    background: #4f46e5;
+    color: #eef2ff;
+    border-radius: 10px;
+    padding: .45rem .75rem;
+    font-size: .85rem;
+    text-align: center;
+    white-space: nowrap;
+
+    flex-basis: 120px;
+}
+
+.flex-gsb-grow .box-gsb {
+    flex-shrink: 1;
+}
+
+.flex-gsb-grow .grow-1 {
+    /*
+        Questi elementi:
+        - partono da 120px (basis)
+        - possono restringersi (shrink:1)
+        - crescono con "peso" 1
+    */
+    flex: 1 1 120px;
+}
+
+.flex-gsb-grow .grow-2 {
+    /*
+        Cresce più degli altri a parità di spazio
+    */
+    flex: 2 1 120px;
+}
+
+/* DEMO SHRINK */
+.flex-gsb-shrink .box-gsb {
+    flex-basis: 180px;
+    flex-grow: 0;
+}
+
+.flex-gsb-shrink .shrink-1 {
+    flex-shrink: 1;
+}
+
+.flex-gsb-shrink .shrink-0 {
+    flex-shrink: 0;
+    background: #f97316;
+}
+
+/* DEMO BASIS */
+.flex-gsb-basis .box-gsb {
+    /*
+        Qui usiamo lo stesso grow/shrink per tutti, cambiamo solo la base
+    */
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.flex-gsb-basis .basis-small {
+    flex-basis: 100px;
+}
+
+.flex-gsb-basis .basis-medium {
+    flex-basis: 200px;
+    background: #6366f1;
+}
+
+.flex-gsb-basis .basis-large {
+    flex-basis: 300px;
+    background: #ec4899;
+}
+
+/* ALIGN-SELF E ORDER */
+.flex-self-order-demo {
+    margin-top: 1.5rem;
+}
+
+.flex-self-order {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+
+    background: #e0f2fe;
+    padding: .8rem;
+    border-radius: 12px;
+    min-height: 90px;
+}
+
+.pill {
+    background: #0ea5e9;
+    color: #f0f9ff;
+    border-radius: 999px;
+    padding: .3rem 1rem;
+    font-size: .9rem;
+}
+
+/* Elemento con align-self */
+.pill-special {
+    /*
+        Align-self sovrascrive l'allineamento del singolo elemento rispetto al align-items del contenitore flex.
+        In questo caso il contenitore allinea al centro, ma questo elemento viene allineato in alto (flex-start)
+    */
+    align-self: flex-start;
+    background: #6366f1;
+}
+
+/* Elemento che viene visualizzato per primo grazie a order */
+.pill-reordered {
+    /*
+        Gli elementi flex hanno di default order: 0.
+
+        Un valore più piccolo viene visivamente "prima", un valore più grande "dopo".
+
+        ATTENZIONE:
+        Cambia solo l'ordine visivo, non l'ordine nel DOM (importante per accessibilità e screen reader)
+    */
+    order: -1;
+    background: #f97316;
+}
