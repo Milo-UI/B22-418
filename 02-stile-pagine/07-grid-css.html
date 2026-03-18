@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML CSS - Stile Pagine 07 - Grid CSS</title>
+
+    <link rel="stylesheet" href="css/07-grid-css.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+
+            <p class="eyebrow">
+                Stile pagine 07
+            </p>
+
+            <h1>CSS Grid</h1>
+
+            <p class="lead">
+                CSS Grid è un sistema di layout a due dimensioni: possiamo controllare righe e colonne insieme.
+            </p>
+            
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+
+                <h2>1) Cos'è CSS Grid</h2>
+
+                <p>
+                    CSS Grid è un sistema di layout <strong>a due dimensioni</strong>: ci permette di controllare contemporaneamente righe e colonne. <br>
+                    Possiamo decidere la struttura del layout come fosse una tabella, ma con molta flessibilità.
+                </p>
+
+                <div class="note">
+                    Usiamo Grid quando ci interessa <strong>dove</strong> stanno gli elementi su righe e colonne, usiamo Flex quando ci interessa l'allineamento <strong>in una sola direzione</strong>.
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="section-alt">
+            <div class="container">
+
+                <h2>2) Il grid container: display: grid e grid-template-columns</h2>
+
+                <p>
+                    Come per Flexbox, tutto parte dal container: <br>
+                    aggiungendo <code>display: grid</code> i figli diretti diventano <code>grid-items</code>. <br>
+                    Poi definiamo quante colonne vogliamo e quanto spazio occupano.
+                </p>
+
+                <div class="grid-demo-block">
+                    <h3>Esempio: tre colonne fisse</h3>
+
+                    <div class="grid-basic">
+                        <div class="cell">1</div>
+                        <div class="cell">2</div>
+                        <div class="cell">3</div>
+                        <div class="cell">4</div>
+                        <div class="cell">5</div>
+                        <div class="cell">6</div>
+                    </div>
+
+                    <p class="caption">
+                        Il container definisce la struttura
+                    </p>
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+
+                <h2>3) Tracce e unità: px, fr, auto, minmax()</h2>
+
+                <p>
+                    Una "traccia" di Grid è una colonna o una riga. <br>
+                    Possiamo usare varie unità per dire quanto è grande: <br>
+                    <code>px</code>, <code>%</code>, <code>fr</code>, <code>auto</code>, <code>minmax()</code>.
+                </p>
+                
+                <div class="note">
+                    Usiamo <code>fr</code> per dividere lo spazio in parti e <code>minmax()</code> + <code>autofit</code> per layout responsivi "che si aggiustano da soli".
+                </div>
+
+                <div class="grid-units-wrapper">
+                    <!-- px + fr -->
+                    <div class="grid-units-block">
+                        <h3>Colonne con px + fr</h3>
+
+                        <div class="grid-units grid-units-fr">
+                            <div class="cell">120px</div>
+                            <div class="cell">1fr</div>
+                            <div class="cell">2fr</div>
+                        </div>
+
+                        <p class="caption">
+                            La prima colonna è fissa, le altre due si dividono lo spazio: la terza prende il doppio della seconda.
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
