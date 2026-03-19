@@ -21,7 +21,7 @@
             <p class="lead">
                 CSS Grid è un sistema di layout a due dimensioni: possiamo controllare righe e colonne insieme.
             </p>
-            
+
         </div>
     </header>
 
@@ -37,9 +37,10 @@
                 </p>
 
                 <div class="note">
-                    Usiamo Grid quando ci interessa <strong>dove</strong> stanno gli elementi su righe e colonne, usiamo Flex quando ci interessa l'allineamento <strong>in una sola direzione</strong>.
+                    Usiamo Grid quando ci interessa <strong>dove</strong> stanno gli elementi su righe e colonne. <br>
+                    Usiamo Flex quando ci interessa l'allineamento <strong>in una sola direzione</strong>.
                 </div>
-                
+
             </div>
         </section>
 
@@ -70,7 +71,7 @@
                         Il container definisce la struttura
                     </p>
                 </div>
-                
+
             </div>
         </section>
 
@@ -84,7 +85,7 @@
                     Possiamo usare varie unità per dire quanto è grande: <br>
                     <code>px</code>, <code>%</code>, <code>fr</code>, <code>auto</code>, <code>minmax()</code>.
                 </p>
-                
+
                 <div class="note">
                     Usiamo <code>fr</code> per dividere lo spazio in parti e <code>minmax()</code> + <code>autofit</code> per layout responsivi "che si aggiustano da soli".
                 </div>
@@ -104,8 +105,240 @@
                             La prima colonna è fissa, le altre due si dividono lo spazio: la terza prende il doppio della seconda.
                         </p>
                     </div>
+
+                    <!-- auto -->
+                    <div class="grid-units-block">
+                        <h3>Colonne con auto</h3>
+
+                        <div class="grid-units grid-units-auto">
+                            <div class="cell">auto</div>
+                            <div class="cell">contenuto più lungo -> la colonna cresce</div>
+                            <div class="cell">auto</div>
+                        </div>
+
+                        <p class="caption">
+                            Con <code>auto</code> la colonna si adatta al contenuto.
+                        </p>
+                    </div>
+
+                    <!-- minmax() -->
+                    <div class="grid-units-block">
+                        <h3>minmax(min, max)</h3>
+
+                        <div class="grid-units grid-units-minmax">
+                            <div class="cell">minmax(120px, 1fr)</div>
+                            <div class="cell">minmax(120px, 1fr)</div>
+                            <div class="cell">minmax(120px, 1fr)</div>
+                        </div>
+
+                        <p class="caption">
+                            Ogni colonna ha un minimo di 120px, ma può crescere fino a riempire lo spazio grazie a <code>1fr</code>.
+                        </p>
+                    </div>
                 </div>
-                
+
+            </div>
+        </section>
+
+        <!-- Posizionamento con linee -->
+        <section class="section-alt">
+            <div class="container">
+
+                <h2>4) Posizionare gli elementi con le linee (grid-column / grid-row)</h2>
+
+                <!--
+                    Il concetto di "line numbers" è molto importante:
+                    le linee sono i bordi delle colonne/righe, numerate da 1 in su.
+
+                    grid-column: 1 / 3 => dalla linea 1 alla linea 3 (prende 2 colonne)
+                    grid-row: 1 / span 2 => parte dalla linea 1 e si estende per 2 tracce
+                -->
+
+                <p>
+                    Ogni griglia ha linee numerate: possiamo decidere da quale linea a quale linea si estende un elemento, oppure usare <code>span</code> per dire "prendi N colonne/righe."
+                </p>
+
+                <div class="grid-lines-demo">
+                    <div class="grid-lines">
+                        <div class="cell area-header">header (col 1-3)</div>
+                        <div class="cell area-sidebar">sidebar</div>
+                        <div class="cell area-main">main (col 1-4)</div>
+                        <div class="cell area-footer">footer (col 1-4)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- grid-template-areas -->
+        <section class="section">
+            <div class="container">
+
+                <h2>5) grid-template-areas: layout leggibili</h2>
+
+                <!--
+                    Grid è spesso utilizzato per i layout di pagina.
+
+                    grid-template-areas permette di "disegnare" il layout a parole:
+
+                    "header header"
+                    "sidebar main"
+                    "footer footer"
+
+                    È super leggibile anche per chi vede il CSS senza aver visto il risultato.
+                -->
+
+                <p>
+                    Con <code>grid-template-areas</code> possiamo "disegnare" il layout direttamente nel CSS usando parole al posto dei numeri.
+                </p>
+
+                <div class="note">
+                    <strong>Vantaggio:</strong> <br>
+                    Leggere il CSS dà l'idea di leggere una mappa del layout, molto più chiaro dei soli numeri di linea.
+                </div>
+
+                <div class="grid-areas-demo">
+                    <div class="page-layout">
+                        <header class="page-header">Header</header>
+                        <aside class="page-sidebar">Sidebar</aside>
+                        <main class="page-main">Contenuto principale</main>
+                        <footer class="page-footer">Footer</footer>
+                    </div>
+
+                    <p class="caption">
+                        Il layout è definito da: <br>
+                        <code>"header header" <br>
+                        "sidebar main" <br>
+                        "footer footer"</code>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- auto-fit + minmax = griglia responsiva -->
+        <section class="section-alt">
+            <div class="container">
+
+                <h2>6) Layout responsivi con auto-fit e minmax()</h2>
+
+                <!--
+                    Questo è il pattern "classico" dei layout moderni fatti con Grid:
+                    repeat(auto-fit, minmax(220px, 1fr))
+
+                    Effetto:
+                    - Quando c'è spazio: più colonne
+                    - Qando lo spazio stringe: meno colonne, fino a 1
+                -->
+
+                <p>
+                    Un pattern molto usato è: <code>grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));</code> per creare card che vanno a capo da sole quando lo schermo si restringe.
+                </p>
+
+                <div class="grid-cards-demo">
+                    <div class="grid-cards">
+                        <article class="card">
+                            <h3>Card 1</h3>
+                            <p>
+                                Ogni card ha una larghezza minima, poi si allarga fino a occupare lo spazio disponibile.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>Card 2</h3>
+                            <p>
+                                Quando lo spazio è sufficiente, le card si affiancano automaticamente.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>Card 3</h3>
+                            <p>
+                                Quando lo schermo si restringe, le card vanno a capo senza breakpoint complicati.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>Card 4</h3>
+                            <p>
+                                Pattern ideale per liste di card, prodotti, articoli di blog, ecc.
+                            </p>
+                        </article>
+                    </div>
+
+                    <p class="caption">
+                        Riduci la larghezza del browser: vedrai il numero di colonne cambiare automaticamente.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- quando usare Flex e quando Grid -->
+        <section class="section">
+            <div class="container">
+
+                <h2>7) Quando usare Flexbox e quando CSS Grid</h2>
+
+                <!--
+                    Flexbox o Grid:
+                    - Flex = 1 dimensione (riga O dolonna)
+                    - Grid = 2 dimensioni (righe E colonne)
+                    - Flex è ottimo per: nav, gruppi di bottoni, allineamenti singoli
+                    - Grid è ottimo per: layout di pagina, dashboard, reticoli complessi
+                -->
+
+                <div class="flex-vs-grid-layout">
+                    <div class="flex-vs-grid-text">
+                        <h3>Regole pratiche e veloci</h3>
+
+                        <ul>
+                            <li>
+                                <strong>Abbiamo una fila di elementi</strong> (o una colonna) e ci interessa solo lo spazio in quella direzione? -> partiamo da <strong>Flexbox</strong>
+                            </li>
+                            <li>
+                                <strong>Stiamo progettando un layout di pagina</strong> (header, sidebar, main, footer) o una griglia di card con righe e colonne ben definite? -> partiamo da <strong>CSS Grid</strong>
+                            </li>
+                            <li>
+                                Se dobbiamo spesso dire "questo elemento prende 2 colonne e 2 righe", è un problema da <strong>Grid</strong>.
+                            </li>
+                            <li>
+                                Se il focus è allineare pochi elementi (es. logo, menu, pulsanti) su una riga, è un problema da <strong>Flexbox</strong>.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="flex-vs-grid-examples">
+                        <div class="example-block">
+                            <h4>Esempio da Flexbox</h4>
+
+                            <div class="example-flex-row">
+                                <div class="pill">Logo</div>
+                                <div class="pill pill-soft">Link 1</div>
+                                <div class="pill pill-soft">Link 2</div>
+                                <div class="pill pill-soft">Link 3</div>
+                                <div class="pill accent">CTA</div>
+                            </div>
+
+                            <p class="caption">
+                                Una semplice riga di elementi con spazi tra loro: tipico caso per Flex.
+                            </p>
+                        </div>
+
+                        <div class="example-block">
+                            <h4>Esempio da Grid</h4>
+
+                            <div class="example-grid-layout">
+                                <div class="eg-header">Header</div>
+                                <div class="eg-sidebar">Sidebar</div>
+                                <div class="eg-main">Main</div>
+                                <div class="eg-footer">Footer</div>
+                            </div>
+
+                            <p class="caption">
+                                Un layout con righe e colonne definite, dove alcuni blocchi occupano più colonne: tipico caso per Grid.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
