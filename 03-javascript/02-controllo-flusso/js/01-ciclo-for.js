@@ -28,3 +28,18 @@ for (let i = 0; i < students.length; i++) {
 /*
     Scrivi un loop che itera da 0 a 15. Per ogni ciclo controlla se il numero è pari o dispari. Mostra il risultato in console.
 */
+// Soluzione con if statement
+for (let i = 0; i <= 15; i++) {
+    if (i % 2 === 0) {
+        console.log(i, 'è pari');
+    } else {
+        console.log(i, 'è dispari');
+    }
+}
+
+// Soluzione senza if statement
+const risultati = ["è pari", "è dispari"];
+
+for (let i = 0; i <= 15; i++) {
+    console.log(`${i} ${risultati[i % 2]}`);
+}
