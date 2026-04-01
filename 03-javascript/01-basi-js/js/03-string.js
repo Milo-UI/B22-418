@@ -109,14 +109,36 @@ console.log(string2);
 /*                                  Esercizi                                  */
 /* -------------------------------------------------------------------------- */
 // Salvare un nome in una variabile e stamparlo senza l'iniziale
-
+let mioNome = 'Milo';
+console.log(mioNome.substring(1));
 
 // Data una stringa, stamparla in console al contrario
-
+let strEs = 'i topi non avevano nipoti';
+let fraseAlContrario = strEs.split('').reverse().join('');
+console.log(fraseAlContrario);
 
 // Crea uno script per estrarre l'estensione di un file, indipendentemente dalla sua lunghezza
 // Esempio: immagine.jpg -> "L'estensione del file è: jpg"
+let nomeFile = 'bootstrap.min.css';
 
+// Metodo 1
+console.log("L'estensione del file è: " + nomeFile.slice(nomeFile.lastIndexOf('.')));
+
+// Metodo 2
+let estensione = nomeFile.split('.').pop();
+console.log("L'estensione del file è: " + estensione);
 
 // Crea uno script per rendere maiuscola l'iniziale di ogni parola di una stringa
 //  oggi sono a lezione -> Oggi Sono A Lezione
+let frase = 'oggi sono a lezione da casa!';
+
+let fraseArray = frase.split(' ');
+let fraseCapitalized = '';
+
+for (let i = 0; i < fraseArray.length; i++) {
+    let inizialeMaiusc = fraseArray[i][0].toUpperCase();
+    let restoParola = fraseArray[i].substring(1);
+    fraseCapitalized += inizialeMaiusc + restoParola + ' ';
+}
+
+console.log(fraseCapitalized);

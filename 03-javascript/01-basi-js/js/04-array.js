@@ -85,7 +85,28 @@ studenti.splice(4, 0, 'Polifemo');
 
     MINIMO 8 prodotti
 */
+let prodotti = ['Pane', 'Nutella', 'Biscotti', 'Pasta', 'Carne', 'Insalata', 'Birra', 'Farina'];
+let prezzi = [1.80, 5.66, 2.00, 0.75, 12, 0.90, 2.45, 1];
+
+console.log(prodotti[1], prezzi[1]);
+
 let elScontrino = document.getElementById('scontrino');
+let elSubtotale = document.getElementById('subtotale');
+let elIva = document.getElementById('iva');
+let elTotale = document.getElementById('totale');
 
+let subtotale = 0;
 
-elScontrino.innerHTML = '<li>Ancora nessun prodotto</li>';
+for (let i = 0; i < prodotti.length; i++) {
+    elScontrino.innerHTML += `<li>${prodotti[i]} €${prezzi[i].toFixed(2)}</li>`;
+
+    subtotale += prezzi[i];
+}
+
+elSubtotale.innerHTML = `<strong>Subtotale:</strong> €${subtotale}`;
+
+let iva = subtotale * 0.22;
+elIva.innerHTML = `<strong>Iva (22%):</strong> €${iva.toFixed(2)}`;
+
+let totale = subtotale + iva;
+elTotale.innerHTML = `<strong>TOTALE:</strong> €${totale.toFixed(2)}`;
