@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - DOM - 01 Document Object Model</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body data-bs-theme="dark">
+
+    <div class="container py-5">
+        <div class="row">
+
+            <div class="col-12">
+                <h1>JavaScript - DOM - 01 Document Object Model</h1>
+            </div>
+
+        </div>
+    </div>
+
+     <section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Introduzione</h2>
+
+                    <p>
+                        Il Document Object Model (DOM) è una rappresentazione strutturata e programmabile di un documento HTML creata dal browser quando viene caricata la pagina.
+                    </p>
+
+                    <p>
+                        Nel momento in cui il documento viene caricato dal browser, questo crea un oggetto document, con le sue proprietà e i suoi metodi, che quindi può essere manipolato tramite JavaScript.
+                    </p>
+
+                    <p>
+                        Grazie al DOM, possiamo accedere e modificare i contenuti, la struttura e lo stile di una pagina web in modo dinamico. Questo consente di creare esperienze interattive e reattive per gli utenti.
+                    </p>
+
+                    <img class="img-fluid rounded" src="img/dom-intro.png" alt="Introduzione al DOM">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Struttura del DOM</h2>
+
+                    <p>
+                        Il DOM rappresenta un documento come una gerarchia ad albero di nodi. Ogni nodo nell'albero rappresenta una parte del documento, come un elemento HTML, un attributo o il testo stesso.
+                    </p>
+
+                    <p>
+                        Ad esempio, un documento HTML può essere rappresentato come segue:
+                    </p>
+
+                    <img class="img-fluid rounded" src="img/dom-structure.png" alt="Struttura del DOM">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Come funziona il DOM?</h2>
+
+                    <p>
+                        Il DOM fornisce un'interfaccia che consente di accedere e modificare il contenuto e la struttura di una pagina web.
+                    </p>
+
+                    <p>
+                        Utilizzando JavaScript, è possibile eseguire operzioni come:
+                    </p>
+
+                    <ul>
+                        <li><strong>Aggiungere nuovi elementi:</strong> creare nuovi nodi e inserirli nell'albero del DOM.</li>
+                        <li><strong>Rimuovere elementi esistenti:</strong> eliminare nodi dall'albero, aggiornando così il contenuto visibile della pagina.</li>
+                        <li><strong>Modificare elementi:</strong> cambiare il <strong>testo</strong>, gli <strong>attributi</strong> o lo <strong>stile</strong> di un elemento esistente.</li>
+                        <li><strong>Reagire agli eventi dell'utente:</strong> come un click, il passaggio del puntatore su un elemento, il premere un tasto della tastiera, ecc ecc.</li>
+                        <li><strong>Creare effetti e animazioni:</strong> come la comparsa di una popup.</li>
+                    </ul>
+                    
+                    <img class="img-fluid rounded" src="img/dom-how-it-works.png" alt="Come funziona il DOM">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Esempio di codice</h2>
+
+                    <p>
+                        Nel contesto dello sviluppo web, è comune utilizzare il DOM per manipolare il contenuto della pagina in risposta a eventi.
+                    </p>
+
+                    <p>
+                        Proviamo a cambiare il testo di un elemento con ID "demo":
+                    </p>
+
+                    <p id="demo">
+                        SONO UN ELEMENTO DI ESEMPIO
+                    </p>
+
+                    <button id="btn" class="btn btn-success">Cliccami</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/01-document-object-model.js"></script>
+</body>
+</html>
