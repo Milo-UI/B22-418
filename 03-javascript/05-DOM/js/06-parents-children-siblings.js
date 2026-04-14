@@ -22,3 +22,17 @@ console.log(Array.from(article.children));
 Array.from(article.children).forEach(child => {
     child.classList.add('article-element');
 });
+
+/* ----------------------------- child -> parent ---------------------------- */
+// Posso anche recuperare u elemento partendo da uno dei suoi figli
+const articleTitle = document.querySelector('h2');
+
+console.log(articleTitle.parentElement);
+console.log(articleTitle.parentElement.parentElement);
+
+/* -------------------------------- siblings -------------------------------- */
+// Posso prendere l'elemento successivo alla stessa altezza dell'alberatura
+console.log(articleTitle.nextElementSibling);
+
+// Posso prendere l'elemento precedente alla stessa altezza dell'alberatura
+console.log(articleTitle.previousElementSibling); // null perché H2 è il primo figlio
