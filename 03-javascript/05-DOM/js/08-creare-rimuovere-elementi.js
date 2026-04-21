@@ -27,6 +27,6 @@ btn.addEventListener('click', () => {
     li.textContent = 'Nuova cosa da fare';
 
     // Inseriamo l'elemento nel DOM "appendendolo" o "prependendolo" al genitore
-    todoList.append(li); // lo aggiunge al fondo
-    // todoList.prepend(li); // lo aggiunge all'inizio
+    todoList.appendChild(li); // lo aggiunge al fondo
+    // todoList.prependChild(li); // lo aggiunge all'inizio
 });
