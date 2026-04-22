@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,6 +23,42 @@
         Stile completamente libero, ma almeno deve esserci un container centrato.
         Punti in più se vengono utilizzati tag semantici in maniera corretta.
     -->
+
+    <main>
+
+        <div class="container">
+
+            <header>
+                <h1>ToDo List</h1>
+
+                <form class="search-form">
+                    <input type="text" name="search" placeholder="Cerca task...">
+                </form>
+            </header>
+
+            <ul class="todos">
+                <li>
+                    <span>Fare la spesa</span>
+                    <i class="fa-solid fa-trash delete"></i>
+                </li>
+                <li>
+                    <span>Pulire il bagno</span>
+                    <i class="fa-solid fa-trash delete"></i>
+                </li>
+                <li>
+                    <span>Dormire dopo lezione</span>
+                    <i class="fa-solid fa-trash delete"></i>
+                </li>
+            </ul>
+
+            <form class="add-form">
+                <label for="add">Aggiungi una nuova task:</label>
+                <input type="text" id="add" name="add">
+            </form>
+
+        </div>
+
+    </main>
 
     <script src="js/script.js"></script>
 </body>
