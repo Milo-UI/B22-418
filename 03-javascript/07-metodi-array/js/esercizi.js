@@ -39,12 +39,16 @@ const orders = [
     Crea un nuovo array con tutti i prodotti che hanno stock maggiore di 0.
     Obiettivo: mostrare solo i prodotti acquistabili.
 */
+const availableProducts = products.filter(product => product.stock > 0);
+console.log(availableProducts);
 
 /* ---------------------------- 2) Utenti premium --------------------------- */
 /*
     Crea un array con tutti gli utenti che hanno isPremium uguale a true.
     Obiettivo: inviare una promozione solo agli utenti premium.
 */
+const premiumUsers = users.filter(user => user.isPremium);
+console.log(premiumUsers);
 
 /* -------------------------------------------------------------------------- */
 /*                                     MAP                                    */
@@ -55,6 +59,8 @@ const orders = [
     Crea un array contenente solo i nomi dei prodotti.
     Obiettivo: generare una lista rapida di titoli per autocomplete o menu.
 */
+const productsNames = products.map(product => product.name);
+console.log(productsNames);
 
 /* ---------------------- 4) Ordini con testo leggibile --------------------- */
 /*
@@ -62,6 +68,9 @@ const orders = [
     "Ordine 101 - totale: 89.97€ - stato: spedito"
     Obiettivo: preparare dati da stampare in dashboard o pannello admin.
 */
+const readableOrders = orders
+    .map(order => `Ordine ${order.id} - totale: ${order.total}€ - stato: ${order.status}`);
+console.log(readableOrders);
 
 /* -------------------------------------------------------------------------- */
 /*                                   REDUCE                                   */
@@ -72,12 +81,22 @@ const orders = [
     Calcola la somma totale di tutti gli ordini.
     Obiettivo: ottenere il fatturato totale.
 */
+const ordersTotal = orders.reduce((acc, curr) => {
+    acc += curr.total;
+    return acc;
+}, 0);
+console.log(ordersTotal);
 
 /* ----------------- 6) Numero totale prodotti in magazzino ----------------- */
 /*
     Calcola quanti pezzi ci sono in totale sommando tutti gli stock dei prodotti.
     Obiettivo: avere una panoramica dell’inventario.
 */
+const inventoryTotal = products.reduce((acc, curr) => {
+    acc += curr.stock;
+    return acc;
+}, 0);
+console.log(`In magazzino ci sono in totale ${inventoryTotal} pezzi disponibili`);
 
 /* -------------------------------------------------------------------------- */
 /*                                    FIND                                    */
@@ -88,12 +107,16 @@ const orders = [
     Crea una funzione per trovare il prodotto tramite il suo id.
     Usa la funzione per trovare il prodotto con id 4.
 */
+const findProductById = id => products.find(product => product.id === id);
+console.log(findProductById(4));
 
 /* ------------------------ 8) Primo ordine annullato ----------------------- */
 /*
     Trova il primo ordine con status uguale a "annullato".
     Obiettivo: cercare rapidamente un caso problematico.
 */
+const firstCanceledOrder = orders.find(order => order.status === 'annullato');
+console.log(firstCanceledOrder);
 
 /* -------------------------------------------------------------------------- */
 /*                                    SORT                                    */
@@ -104,12 +127,16 @@ const orders = [
     CREA UNA COPIA DELL’ARRAY products e ordinala per price crescente.
     Obiettivo: ordinamento per prezzo in un e-commerce.
 */
+const productsAscendingPrice = [...products].sort((a, b) => a.price - b.price);
+console.log(productsAscendingPrice);
 
 /* ---------------- 10) Utenti dal più giovane al più anziano --------------- */
 /*
     CREA UNA COPIA DELL’ARRAY users e ordinala per age crescente.
     Obiettivo: segmentazione o analisi utenti.
 */
+const usersAscendingAge = [...users].sort((a, b) => a.age - b.age);
+console.log(usersAscendingAge);
 
 /* -------------------------------------------------------------------------- */
 /*                               Esercizi bonus                               */
@@ -121,14 +148,32 @@ const orders = [
     Output atteso: un array di stringhe.
     Obiettivo: elenco veloce dei prodotti acquistabili.
 */
+const availableProductsNames = products
+    .filter(product => product.stock > 0)
+    .map(product => product.name);
+
+console.log(availableProductsNames);
 
 /* ---------------------- 12) Totale ordini consegnati ---------------------- */
 /*
     Usa i metodi studiati per calcolare la somma totale degli ordini con status uguale a "consegnato".
     Obiettivo: sapere quanto è stato effettivamente portato a termine e a quanto ammonta il guadagno.
 */
+const deliveredOrdersTotal = orders
+    .filter(order => order.status === 'consegnato')
+    .reduce((acc, curr) => {
+        acc += curr.total;
+        return acc;
+    }, 0);
+
+console.log(deliveredOrdersTotal.toFixed(2));
 
 /* ------------------------- 13) Prodotti top rated ------------------------- */
 /*
     Trova tutti i prodotti con rating maggiore o uguale a 4.5 e restituisci solo i loro nomi.
 */
+const topRatedProducts = products
+    .filter(product => product.rating >= 4.5)
+    .map(product => product.name);
+
+console.log(topRatedProducts);
