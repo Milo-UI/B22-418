@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrello E-commerce con API</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!--
+        Realizzare una mini pagina di e-commerce con un elenco di prodotti che recuperiamo dall'endpoint:
+            https://fakestoreapi.com/products
+        
+        L'endpoint restituisce un array di oggetti con id, title, price, description, category, image, rating.
+        Per le categorie disponibili si può usare:
+            https://fakestoreapi.com/products/categories
+
+        Nella pagina bisogna:
+            - caricare i prodotti dall'API e visualizzarli in una griglia di card (CSS Grid)
+            - aggiungere prodotti al carrello
+            - vedere il carrello con quantità e totale, e poter aggiornare la quantità o rimuovere un articolo
+            - filtrare i prodotti per categoria
+            - ordinare i prodotti per prezzo (crescente/decrescente)
+            - svuotare completamente il carrello
+
+        REQUISITI SUGLI STORAGE
+            - Il contenuto del carrello deve persistere alla chiusura del browser -> localStorage
+            - Il filtro per categoria e l'ordinamento attivi devono valere solo per la sessione corrente: alla chiusura della tab tornano allo stato di default -> sessionStorage
+
+        REQUISITI SUL LAYOUT
+            - I prodotti vanno mostrati in una griglia responsive con CSS Grid: le cardi si devono adattare al numeri di colonne disponibili senza media query.
+
+        SUGGERIMENTO
+            - I dati delle API sono mutabili; non salvare l'intero oggetto prodotto in localStorage, salva solo id e quantità. Quando devi mostrare il carrello, utilizza gli id incrociandoli con la lista prodotti caricata.
+            - Tenere in memoria una variabile 'carrello' (array di oggetti { id, quantita }) e una variabile per i filtri attivi. Sincronizzarle con gli storage ogni volta che cambiano e re-renderizzare la lista visibile.
+    -->
+
+</body>
+</html>
