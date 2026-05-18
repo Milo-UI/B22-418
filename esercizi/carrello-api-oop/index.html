@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrello E-commerce con API</title>
+    <title>Carrello E-commerce con API - Refactoring OOP</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -12,31 +12,40 @@
 <body>
 
     <!--
-        Realizzare una mini pagina di e-commerce con un elenco di prodotti che recuperiamo dall'endpoint:
-            https://fakestoreapi.com/products
-        
-        L'endpoint restituisce un array di oggetti con id, title, price, description, category, image, rating.
-        Per le categorie disponibili si può usare:
-            https://fakestoreapi.com/products/categories
+        ESERCIZO REFACTORING OOP
 
-        Nella pagina bisogna:
-            - caricare i prodotti dall'API e visualizzarli in una griglia di card (CSS Grid)
-            - aggiungere prodotti al carrello
-            - vedere il carrello con quantità e totale, e poter aggiornare la quantità o rimuovere un articolo
-            - filtrare i prodotti per categoria
-            - ordinare i prodotti per prezzo (crescente/decrescente)
-            - svuotare completamente il carrello
+        Prendi il codice JavaScript dell'esercizio precedente (../carrello-api/js/script.js) e riscrivilo interamente in programmazione orientata agli oggetti.
 
-        REQUISITI SUGLI STORAGE
-            - Il contenuto del carrello deve persistere alla chiusura del browser -> localStorage
-            - Il filtro per categoria e l'ordinamento attivi devono valere solo per la sessione corrente: alla chiusura della tab tornano allo stato di default -> sessionStorage
+        La logica deve rimanere identica: stessi filtri, stesso carrello, stesso salvataggio in local e session storage. Cambia solo come è organizzato il codice.
 
-        REQUISITI SUL LAYOUT
-            - I prodotti vanno mostrati in una griglia responsive con CSS Grid: le card si devono adattare al numeri di colonne disponibili senza media query.
+        STRUTTURA DA SEGUIRE
+        Devi creare 3 classi, ciascuna con una responsabilità precisa. Il punto centrale dell'esercizio è capire come farle comunicare tra loro.
 
-        SUGGERIMENTO
-            - I dati delle API sono mutabili; non salvare l'intero oggetto prodotto in localStorage, salva solo id e quantità. Quando devi mostrare il carrello, utilizza gli id incrociandoli con la lista prodotti caricata.
-            - Tenere in memoria una variabile 'carrello' (array di oggetti { id, quantita }) e una variabile per i filtri attivi. Sincronizzarle con gli storage ogni volta che cambiano e re-renderizzare la lista visibile.
+            - Classe 1 — Cart
+                Responsabilità: gestione CRUD (Create, Read, Update, Delete) del carrello e persistenza in localStorage.
+                - Non sa nulla del DOM
+                - Non conosce i dati dei prodotti: li riceve come parametro nei metodi che ne hanno bisogno
+                - Seve esporre metodi per aggiungere, rimuovere, modificare le quantità e svuotare il carrello
+                - Deve esporre metodi per calcolare il totale e il numero di articoli
+                - Deve salvare in localStorage ogni volta che il carrello cambia
+            
+            - Classe 2 — ProductCatalog
+                Responsabilità: recupero dei prodotti dall'API, filtri e ordinamento, persistenza dei filtri in sessionStorage.
+                - Non sa nulla del DOM
+                - Deve esporre un metodo async per caricare i prodotti dall'API e gestire eventuali errori
+                - Deve esporre un metodo che restituisce i prodotti filtrati e ordinati secondo lo stato attivo (senza modificare l'array originale)
+                - Deve esporre un metodo che restituisce le categorie uniche presenti nei prodotti
+                - Quando la categoria o l'ordinamento cambiano, deve aggiornarsi e salvare di nuovo il valore in sessionStorage
+
+            - Classe 3 — App
+                Responsabilità: rendering del DOM e gestione degli eventi. Coordina Cart e ProductCatalog.
+                - Nel costruttore crea le istanze di Cart e ProductCatalog e acquisisce i riferimenti agli elementi del DOM
+                - Deve esporre un metodo async init() che carica i prodotti e avvia i render iniziali
+                - Deve esporre metodi separati per renderizzare i prodotti, il carrello e le opzioni di filtrow
+                - Tutti gli event listener vanno registrati in un unico metodo dedicato, chiamato una sola volta
+
+        COME SI AVVIA L'APP
+        Niente IIFE, niente funzioni globali "sciolte", l'app deve avviarsi tramite il metodo init() di un oggetto App.
     -->
 
     <div class="container">
