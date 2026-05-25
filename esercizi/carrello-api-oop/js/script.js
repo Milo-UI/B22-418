@@ -1,251 +1,308 @@
-// URL dell'API
-const API_URL = 'https://fakestoreapi.com/products';
+/*
+    Classi:
+        - Cart              -> gestione carrello e localStorage
+        - ProductCatalog    -> fetch API, filtri, ordinamento e sessionStorage
+        - App               -> rendering DOM, event listeners, comunicazione tra gli altri oggetti
+*/
 
-// Riferimenti al DOM
-const listaProdotti = document.querySelector('.prodotti-grid');
-const listaCarrello = document.querySelector('.carrello');
-const filtroCategoria = document.querySelector('.filtro-categoria');
-const filtroOrdine = document.querySelector('.filtro-ordine');
-const conteggioEl = document.querySelector('.conteggio');
-const totaleEl = document.querySelector('.totale-valore');
-const btnSvuota = document.querySelector('.svuota');
-const loadingEl = document.querySelector('.loading');
+/* ---------------------------------- Cart ---------------------------------- */
+// Responsabilità: CRUD del carrello e persistenza in localStorage
+class Cart {
+    constructor() {
+        this.items = JSON.parse(localStorage.getItem('carrello')) || [];
+    }
 
-// Stato dell'app: i prodotti partono vuoti, verranno popolati dall'API.
-// Il carrello e i filtri li recuperiamo subito dagli storage.
-let prodotti = [];
-let carrello = JSON.parse(localStorage.getItem('carrello')) || [];
-let categoriaAttiva = sessionStorage.getItem('categoriaAttiva') || 'tutte';
-let ordineAttivo = sessionStorage.getItem('ordineAttivo') || 'default';
+    // Aggiungere un prodotto. Se è già presente, incrementa la quantità
+    add(id) {
+        const esistente = this.items.find(item => item.id === id);
 
-// 1 - Funzione async per recuperare i prodotti dall'API.
-//     Usiamo try/catch per gestire un eventuale errore (rete giù, API down, ecc.)
-const caricaProdotti = async () => {
-    try {
-        const risposta = await fetch(API_URL);
-
-        // fetch non lancia errore per status 4xx/5xx, va controllato manualmente
-        if (!risposta.ok) {
-            throw new Error(`Errore API: ${risposta.status}`);
+        if (esistente) {
+            esistente.quantita++;
+        } else {
+            this.items.push({ id: id, quantita: 1 });
         }
 
-        const dati = await risposta.json();
-        return dati;
-    } catch (errore) {
-        console.error('Errore nel caricamento dei prodotti:', errore);
-        listaProdotti.innerHTML = `<div class="errore">Impossibile caricare i prodotti. Riprova più tardi.</div>`;
-        return [];
+        this.save();
     }
-};
 
-// 2 - Popoliamo dinamicamente la select delle categorie a partire dai prodotti caricati.
-//     Per ottenere i valori unici scorriamo i prodotti e aggiungiamo la categoria a un nuovo
-//     array solo se non è già presente (controllo con includes()).
-const popolaSelectCategorie = () => {
-    const categorie = [];
+    // Modificare la quantità. Se scende a 0, rrimuovere l'articolo
+    updateQty(id, delta) {
+        const item = this.items.find(i => i.id === id);
+        if (!item) return;
 
-    prodotti.forEach(p => {
-        if (!categorie.includes(p.category)) {
-            categorie.push(p.category);
+        item.quantita += delta;
+
+        if (item.quantita <= 0) {
+            this.remove(id);
+            return; // save() già chiamato in remove()
         }
-    });
 
-    categorie.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-        filtroCategoria.appendChild(option);
-    });
-
-    // Ripristino del valore selezionato (se la categoria salvata esiste ancora)
-    filtroCategoria.value = categoriaAttiva;
-    filtroOrdine.value = ordineAttivo;
-};
-
-// 3 - Applica filtri e ordinamento e restituisce l'array di prodotti da mostrare.
-const ottieniProdottiVisibili = () => {
-    // slice() senza argomenti restituisce una COPIA dell'array originale.
-    // Lavorare sulla copia ci permette di filtrare/ordinare senza modificare l'array `prodotti`.
-    let risultato = prodotti.slice();
-
-    if (categoriaAttiva !== 'tutte') {
-        risultato = risultato.filter(p => p.category === categoriaAttiva);
+        this.save();
     }
 
-    if (ordineAttivo === 'prezzo-asc') {
-        risultato.sort((a, b) => a.price - b.price);
-    } else if (ordineAttivo === 'prezzo-desc') {
-        risultato.sort((a, b) => b.price - a.price);
+    // Rimuovere un articolo per id
+    remove(id) {
+        this.items = this.items.filter(item => item.id !== id);
+        this.save();
     }
 
-    return risultato;
-};
-
-// 4 - Render dei prodotti nella lista visibile.
-const renderProdotti = () => {
-    const visibili = ottieniProdottiVisibili();
-
-    if (visibili.length === 0) {
-        listaProdotti.innerHTML = `<div class="empty">Nessun prodotto trovato</div>`;
-        return;
+    // Svuotare completamente il carrello
+    clear() {
+        this.items = [];
+        this.save();
     }
 
-    // Ogni prodotto è una card che andrà a popolare la griglia CSS Grid.
-    listaProdotti.innerHTML = visibili.map(p => `
-        <article class="card">
-            <img src="${p.image}" alt="${p.title}" class="card-img">
-            <span class="card-categoria">${p.category}</span>
-            <h3 class="card-nome" title="${p.title}">${p.title}</h3>
-            <div class="card-prezzo">${p.price.toFixed(2)} $</div>
-            <button class="btn btn-add" data-id="${p.id}">
-                <i class="fa-solid fa-cart-plus"></i> Aggiungi
-            </button>
-        </article>
-    `).join('');
-};
+    // Calcolare il costo totale. Riceve l'array prodotti come parametro, perché Cart non ha accesso diretto ai dati dell'API
+    getTotal(products) {
+        return this.items.reduce((acc, item) => {
+            const prodotto = products.find(p => p.id === item.id);
+            if (!prodotto) return acc;
 
-// 5 - Render del carrello + conteggio + totale.
-const renderCarrello = () => {
-    if (carrello.length === 0) {
-        listaCarrello.innerHTML = `<li class="empty">Il carrello è vuoto</li>`;
-    } else {
-        listaCarrello.innerHTML = carrello.map(item => {
-            // "Rigonfiamo" l'id incrociandolo con la lista prodotti caricata dall'API
-            const prodotto = prodotti.find(p => p.id === item.id);
-
-            return `
-                <li>
-                    <img src="${prodotto.image}" alt="${prodotto.title}" class="carrello-img">
-                    <div class="carrello-info">
-                        <span class="carrello-nome" title="${prodotto.title}">${prodotto.title}</span>
-                        <span class="carrello-prezzo">${prodotto.price.toFixed(2)} $ × ${item.quantita}</span>
-                    </div>
-                    <div class="qta-controls">
-                        <button class="qta-meno" data-id="${prodotto.id}">−</button>
-                        <span class="qta">${item.quantita}</span>
-                        <button class="qta-piu" data-id="${prodotto.id}">+</button>
-                        <button class="rimuovi" data-id="${prodotto.id}" title="Rimuovi">
-                            <i class="fa-regular fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </li>
-            `;
-        }).join('');
+            return acc + prodotto.price * item.quantita;
+        }, 0);
     }
 
-    const totaleArticoli = carrello.reduce((acc, item) => acc + item.quantita, 0);
-    conteggioEl.textContent = totaleArticoli;
-
-    const totalePrezzo = carrello.reduce((acc, item) => {
-        const prodotto = prodotti.find(p => p.id === item.id);
-        // Se il prodotto non esiste più nell'API, non lo conteggiamo nel totale
-        if (!prodotto) return acc;
-        return acc + (prodotto.price * item.quantita);
-    }, 0);
-    totaleEl.textContent = `${totalePrezzo.toFixed(2)} $`;
-};
-
-// 6 - Salviamo SOLO id e quantita in localStorage (non l'intero prodotto).
-const salvaCarrello = () => {
-    localStorage.setItem('carrello', JSON.stringify(carrello));
-};
-
-// 7 - Aggiungere un prodotto al carrello.
-const aggiungiAlCarrello = (id) => {
-    const esistente = carrello.find(item => item.id === id);
-
-    if (esistente) {
-        esistente.quantita++;
-    } else {
-        carrello.push({ id: id, quantita: 1 });
+    // Contare il numero totale di articoli
+    getTotalQty() {
+        return this.items.reduce((acc, item) => acc + item.quantita, 0);
     }
 
-    salvaCarrello();
-    renderCarrello();
-};
+    // Salvare in localStorage SOLO id e quantità
+    save() {
+        localStorage.setItem('carrello', JSON.stringify(this.items));
+    }
+}
 
-// 8 - Modificare la quantità dei prodotti, se arriva a 0 rimuoviamo l'articolo.
-const modificaQuantita = (id, delta) => {
-    const item = carrello.find(i => i.id === id);
-    if (!item) return;
-
-    item.quantita += delta;
-
-    if (item.quantita <= 0) {
-        carrello = carrello.filter(i => i.id !== id);
+/* ----------------------------- ProductCatalog ----------------------------- */
+// Fetch API, filtri, ordinamento, persistenza filitri in sessionStorage
+class ProductCatalog {
+    constructor() {
+        this.API_URL = 'https://fakestoreapi.com/products';
+        this.products = [];
+        this.category = sessionStorage.getItem('categoriaAttiva') || 'tutte';
+        this.order = sessionStorage.getItem('ordineAttivo') || 'default';
     }
 
-    salvaCarrello();
-    renderCarrello();
-};
+    // Caricare i prodotti dall'API
+    async load() {
+        try {
+            const risposta = await fetch(this.API_URL);
 
-// 9 - Rimuovere un articolo dal carrello
-const rimuoviDalCarrello = (id) => {
-    carrello = carrello.filter(item => item.id !== id);
-    salvaCarrello();
-    renderCarrello();
-};
+            if (!risposta.ok) {
+                throw new Error(`Errore API: ${risposta.status}`);
+            }
 
-// 10 - Event delegation sulla lista prodotti.
-listaProdotti.addEventListener('click', e => {
-    if (e.target.classList.contains('btn-add')) {
-        const id = parseInt(e.target.dataset.id);
-        aggiungiAlCarrello(id);
-    }
-});
-
-// 11 - Event delegation sul carrello
-listaCarrello.addEventListener('click', e => {
-    const target = e.target.closest('button');
-    if (!target) return;
-
-    const id = parseInt(target.dataset.id);
-
-    if (target.classList.contains('qta-piu')) {
-        modificaQuantita(id, 1);
-    } else if (target.classList.contains('qta-meno')) {
-        modificaQuantita(id, -1);
-    } else if (target.classList.contains('rimuovi')) {
-        rimuoviDalCarrello(id);
-    }
-});
-
-// 12 - Pulsante svuota carrello con conferma
-btnSvuota.addEventListener('click', () => {
-    if (carrello.length === 0) return;
-
-    if (confirm('Vuoi davvero svuotare il carrello?')) {
-        carrello = [];
-        salvaCarrello();
-        renderCarrello();
-    }
-});
-
-// 13 - Listener sui filtri: salviamo in sessionStorage e re-rendirizziamo.
-filtroCategoria.addEventListener('change', e => {
-    categoriaAttiva = e.target.value;
-    sessionStorage.setItem('categoriaAttiva', categoriaAttiva);
-    renderProdotti();
-});
-
-filtroOrdine.addEventListener('change', e => {
-    ordineAttivo = e.target.value;
-    sessionStorage.setItem('ordineAttivo', ordineAttivo);
-    renderProdotti();
-});
-
-// 14 - Inizializzazione: carichiamo i prodotti dall'API e poi facciamo i render.
-//      IIFE = Immediately Invoked Function Expression - una funzione che si definisce e si chiama nello stesso momento
-(async () => {
-    prodotti = await caricaProdotti();
-
-    // Nascondiamo il messaggio di loading
-    loadingEl.style.display = 'none';
-
-    if (prodotti.length > 0) {
-        popolaSelectCategorie();
-        renderProdotti();
+            this.products = await risposta.json();
+            return true;
+        } catch (errore) {
+            console.error('Errore nel caricamento dei prodotti:', errore);
+            this.products = [];
+            return false;
+        }
     }
 
-    renderCarrello();
-})();
+    // Impostare la categoria attiva e la persistenza in sessionStorage
+    setCategory(value) {
+        this.category = value;
+        sessionStorage.setItem('categoriaAttiva', value);
+    }
+
+    // Impostare l'ordinamento attivo e la persistenza in sessionStorage
+    setOrder(value) {
+        this.order = value;
+        sessionStorage.setItem('ordineAttivo', value);
+    }
+
+    // Ottenere le categorie uniche presenti nei prodotti
+    getCategories() {
+        const categorie = [];
+
+        this.products.forEach(p => {
+            if (!categorie.includes(p.category)) {
+                categorie.push(p.category);
+            }
+        });
+
+        return categorie;
+    }
+
+    // Retituire una copia di products filtrata e ordinata
+    getVisible() {
+        let risultato = this.products.slice();
+
+        if (this.category !== 'tutte') {
+            risultato = risultato.filter(p => p.category === this.category);
+        }
+
+        if (this.order === 'prezzo-asc') {
+            risultato.sort((a, b) => a.price - b.price);
+        } else if (this.order === 'prezzo-desc') {
+            risultato.sort((a, b) => b.price - a.price);
+        }
+
+        return risultato
+    }
+}
+
+/* ----------------------------------- App ---------------------------------- */
+// Rendering del DOM ed event listeners. Tiene i riferimenti agli elementi del DOM e orchestra Cart e ProductCatalog
+class App {
+    constructor() {
+        // Istanze delle altre classi
+        this.cart = new Cart();
+        this.catalog = new ProductCatalog();
+
+        // Riferimenti al DOM
+        this.listaProdotti = document.querySelector('.prodotti-grid');
+        this.listaCarrello = document.querySelector('.carrello');
+        this.filtroCategoria = document.querySelector('.filtro-categoria');
+        this.filtroOrdine = document.querySelector('.filtro-ordine');
+        this.conteggioEl = document.querySelector('.conteggio');
+        this.totaleEl = document.querySelector('.totale-valore');
+        this.btnSvuota = document.querySelector('.svuota');
+        this.loadingEl = document.querySelector('.loading');
+
+        this.bindEvents();
+    }
+
+    // Punto di ingresso: carica i prodotti e avvia il render
+    async init() {
+        const successo = await this.catalog.load();
+
+        this.loadingEl.style.display = 'none';
+
+        if (successo) {
+            this.renderCategories();
+            this.renderProducts();
+        } else {
+            this.listaProdotti.innerHTML = `<div className="errore">Impossibile caricare i prodotti. Prova più tardi.</div>`;
+        }
+
+        // Il carrello si renderizza sempre, indipendentemente dall'esito dell'API
+        this.renderCart();
+    }
+
+    // Popolare la select delle categorie con le opzioni ricavate dall'API
+    renderCategories() {
+        this.catalog.getCategories().forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+            this.filtroCategoria.appendChild(option);
+        });
+
+        // Ripristino dei valori salvati in sessionStorage
+        this.filtroCategoria.value = this.catalog.category;
+        this.filtroOrdine.value = this.catalog.order;
+    }
+
+    // Render della griglia prodotti
+    renderProducts() {
+        const visibili = this.catalog.getVisible();
+
+        if (visibili.length === 0) {
+            this.listaProdotti.innerHTML = `<div className="empty">Nessun prodotto trovato</div>`;
+            return;
+        }
+
+        this.listaProdotti.innerHTML = visibili.map(p => `
+            <article class="card">
+                <img src="${p.image}" alt="${p.title}" class="card-img">
+                <span class="card-categoria">${p.category}</span>
+                <h3 class="card-nome" title="${p.title}">${p.title}</h3>
+                <div class="card-prezzo">${p.price.toFixed(2)} $</div>
+                <button class="btn btn-add" data-id="${p.id}">
+                    <i class="fa-solid fa-cart-plus"></i> Aggiungi
+                </button>
+            </article>
+        `).join('');
+    }
+
+    // Render del carrello, conteggio articoli e totale
+    renderCart() {
+        if (this.cart.items.length === 0) {
+            this.listaCarrello.innerHTML = `<li className="empty">Il carrello è vuoto</li>`;
+        } else {
+            this.listaCarrello.innerHTML = this.cart.items.map(item => {
+                const prodotto = this.catalog.products.find(p => p.id === item.id);
+
+                return `
+                    <li>
+                        <img src="${prodotto.image}" alt="${prodotto.title}" class="carrello-img">
+                        <div class="carrello-info">
+                            <span class="carrello-nome" title="${prodotto.title}">${prodotto.title}</span>
+                            <span class="carrello-prezzo">${prodotto.price.toFixed(2)} $ × ${item.quantita}</span>
+                        </div>
+                        <div class="qta-controls">
+                            <button class="qta-meno" data-id="${prodotto.id}">−</button>
+                            <span class="qta">${item.quantita}</span>
+                            <button class="qta-piu" data-id="${prodotto.id}">+</button>
+                            <button class="rimuovi" data-id="${prodotto.id}" title="Rimuovi">
+                                <i class="fa-regular fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        this.conteggioEl.textContent = this.cart.getTotalQty();
+        this.totaleEl.textContent = `${this.cart.getTotal(this.catalog.products).toFixed(2)} $`;
+    }
+
+    // Registrare tutti gli event listenere (un metodo chiamato una sola volta nel costruttore)
+    bindEvents() {
+        // Event delegation — prodotti
+        this.listaProdotti.addEventListener('click', e => {
+            if (e.target.classList.contains('btn-add')) {
+                const id = parseInt(e.target.dataset.id);
+                this.cart.add(id);
+                this.renderCart();
+            }
+        });
+
+        // Event delegation — carrello
+        this.listaCarrello.addEventListener('click', e => {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const id = parseInt(target.dataset.id);
+
+            if (target.classList.contains('qta-piu')) {
+                this.cart.updateQty(id, 1);
+            } else if (target.classList.contains('qta-meno')) {
+                this.cart.updateQty(id, -1);
+            } else if (target.classList.contains('rimuovi')) {
+                this.cart.remove(id);
+            }
+
+            this.renderCart();
+        });
+
+        // Filtro categoria
+        this.filtroCategoria.addEventListener('change', e => {
+            this.catalog.setCategory(e.target.value);
+            this.renderProducts();
+        });
+
+        // Filtro ordinamento
+        this.filtroOrdine.addEventListener('change', e => {
+            this.catalog.setOrder(e.target.value);
+            this.renderProducts();
+        });
+
+        // Svuota carrello
+        this.btnSvuota.addEventListener('click', () => {
+            if (this.cart.items.length === 0) return;
+
+            if (confirm('Vuoi davvero svuotare il carrello?')) {
+                this.cart.clear();
+                this.renderCart();
+            }
+        });
+    }
+}
+
+/* --------------------------- Avvio applicazione --------------------------- */
+const app = new App();
+app.init();
